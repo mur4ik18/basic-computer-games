@@ -1,19 +1,21 @@
+#![feature(int_log)]
 use rand::Rng;
 use std::io;
 use std::cmp::Ordering;
+
+
+
 fn main() {
     let mut rng = rand::thread_rng();
     let mut still_guessing = true;
-    let limit_goal = 3;
     let mut limit = set_limit();
-    println!("{}", limit);
+    let mut limit_goal = 1+(limit.log2()/2_i32.log2()) ;
     loop{
         let mut won = false;
         let mut guess_count = 1;
         let my_guess = rng.gen_range(1..limit);
         println!("I'm thinking of a number between 1 and {}",limit);
         println!("Now you try to guess what it is.");
-
         while still_guessing {
             let inp = get_input()
                 .trim()
@@ -33,24 +35,22 @@ fn main() {
                 won = true;
                 still_guessing = false;
             }
-
+        }
         if won {
-
             match guess_count.cmp(&limit_goal) {
                 Ordering::Less => println!("Very good."),
                 Ordering::Equal => println!("Good."),
                 Ordering::Greater => println!("You should have been able to get it in only {}", limit_goal),
             }
             insert_whitespaces();
-        }
-        else {
+            still_guessing = true;
+        } else {
             insert_whitespaces();
             limit = set_limit();
-        }
+            limit_goal = 1+(limit.log2()/2_i32.log2());
         }
     }
 }
-
 
 fn set_limit() -> i64 {
 
@@ -72,10 +72,8 @@ fn set_limit() -> i64 {
 }
 
 fn insert_whitespaces() {
-    println!("/n/n/n/n");
+    println!("\n\n\n");
 }
-
-
 
 fn get_input() -> String {
     let mut input = String::new();
