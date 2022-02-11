@@ -3,25 +3,26 @@ use rand::Rng;
 use std::io;
 use std::cmp::Ordering;
 
-
-
 fn main() {
+
     let mut rng = rand::thread_rng();
     let mut still_guessing = true;
-    let mut limit = set_limit();
-    let mut limit_goal = 1+(limit.log2()/2_i32.log2()) ;
+    let limit = set_limit();
+    let limit_goal = 1+(limit.log2()/2_i32.log2()) ;
     loop{
+
         let mut won = false;
         let mut guess_count = 1;
         let my_guess = rng.gen_range(1..limit);
+
         println!("I'm thinking of a number between 1 and {}",limit);
         println!("Now you try to guess what it is.");
+
         while still_guessing {
             let inp = get_input()
                 .trim()
                 .parse::<i64>().unwrap();
-            insert_whitespaces();
-
+            println!("\n\n\n");
             if inp < my_guess {
                 println!("Too low. Try a bigger answer");
                 guess_count+=1;
@@ -42,12 +43,11 @@ fn main() {
                 Ordering::Equal => println!("Good."),
                 Ordering::Greater => println!("You should have been able to get it in only {}", limit_goal),
             }
-            insert_whitespaces();
+
+            println!("\n\n\n");
             still_guessing = true;
         } else {
-            insert_whitespaces();
-            limit = set_limit();
-            limit_goal = 1+(limit.log2()/2_i32.log2());
+            println!("\n\n\n");
         }
     }
 }
@@ -69,10 +69,6 @@ fn set_limit() -> i64 {
     else {
         set_limit()
     }
-}
-
-fn insert_whitespaces() {
-    println!("\n\n\n");
 }
 
 fn get_input() -> String {
